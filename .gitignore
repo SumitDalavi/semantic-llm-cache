@@ -1,5 +1,32 @@
+# Node.js
 node_modules/
 dist/
-logs/
+coverage/
+npm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+.coverage
+
+# Go
+bin/
+*.exe
+
+# OS / Editor / IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.log
+
+# Environment variables
 .env
-*.db
+.env.local
+.env.*.local
