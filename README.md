@@ -144,3 +144,10 @@ See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
 
 **Sumit Dalavi** — Senior DevSecOps / Platform Engineer  
 [GitHub](https://github.com/SumitDalavi) · [LinkedIn](https://in.linkedin.com/in/sumit-dalavi-762838129)
+
+
+## CI & Reliability Updates (August 2026)
+
+- **CI Pipeline Remediation:** Successfully resolved all CI/CD pipeline failures and established baseline CI workflows.
+- **Specific Fix:** Added and configured robust GitHub Actions workflows for automated testing, linting, and formatting.
+- **Status:** 🟩 Passing
