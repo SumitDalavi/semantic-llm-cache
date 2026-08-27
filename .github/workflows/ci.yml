@@ -1,21 +1,33 @@
 name: CI Pipeline
-on:
+'on':
   push:
-    branches: [ "master" ]
+    branches:
+      - master
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 jobs:
   node-build-test:
     name: Node.js Build & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 20.x
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+      - name: Run Linter
+        run: npm run lint --if-present || true
       - name: Build
-        run: npm run build --if-present
-      - name: Test
-        run: npm test --if-present
+        run: npm run build
+      - name: Run Tests
+        run: npm test
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker Image
+        run: docker build -t test-image .
