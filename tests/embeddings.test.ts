@@ -74,3 +74,42 @@ describe('TTL Determination', () => {
     expect(determineTtl('Summarize this paragraph for me.')).toBe(defaultTtl);
   });
 });
+
+describe('Embed Text', () => {
+  let originalEnv: NodeJS.ProcessEnv;
+
+  beforeEach(() => {
+    originalEnv = process.env;
+    process.env = { ...originalEnv, OPENAI_API_KEY: 'test-key' };
+    jest.resetModules();
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  test('embedText uses mocked OpenAI client', async () => {
+    const mockCreate = jest.fn().mockResolvedValue({
+      data: [{ embedding: [0.1, 0.2, 0.3] }]
+    });
+
+    jest.doMock('openai', () => {
+      return jest.fn().mockImplementation(() => {
+        return {
+          embeddings: {
+            create: mockCreate
+          }
+        };
+      });
+    });
+
+    const { embedText } = require('../src/embeddings');
+    const result = await embedText('hello world');
+    
+    expect(result).toEqual([0.1, 0.2, 0.3]);
+    expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({
+      input: 'hello world',
+      model: 'text-embedding-3-small'
+    }));
+  });
+});
