@@ -32,3 +32,6 @@ bin/
 .env.*.local
 
 .nyc_output/
+
+.venv/
+.terraform/
