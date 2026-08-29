@@ -1,5 +1,8 @@
 # Semantic Caching Layer for LLM APIs
 
+> **Maturity:** Full Prototype
+> _Semantic caching proxy for LLMs that detects semantically similar requests and serves cached responses instantly._
+
 > **Cut LLM API costs 30–60% and reduce P95 latency to near-zero** with a drop-in semantic caching proxy that detects semantically similar requests and serves cached responses instantly.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -132,13 +135,20 @@ npm test
 
 Tests cover cosine similarity, cache key hashing, and TTL determination — pure functions that don't require Redis or API keys.
 
-## 📄 Architecture & Design Decisions
+## Mock Boundaries (Honest Scope)
 
-See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
-- Why linear scan instead of Redis Stack VSS
-- How system prompt hashing prevents cross-contamination
-- TTL auto-assignment strategy
-- Near-miss analysis for threshold tuning
+| What | Status | Details |
+|---|---|---|
+| OpenAI API | **Optional** | Uses real `text-embedding-3-small` when key is present, otherwise falls back to dummy local embeddings for tests. |
+| Redis Vector Store | **Real** | Uses real Redis via Docker Compose. |
+| Prometheus/Grafana | **Real** | Full metrics stack running locally. |
+
+## 📚 Documentation
+
+- [Architecture](docs/architecture.md) — System diagram and component details
+- [Runbook](docs/runbook.md) — Setup, commands, and expected outputs
+- [Decisions](docs/decisions.md) — ADRs for cache pattern choices
+- [Changelog](docs/changelog.md) — Change history
 
 ## 👨‍💻 Author
 
@@ -151,3 +161,12 @@ See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
 - **CI Pipeline Remediation:** Successfully resolved all CI/CD pipeline failures and established baseline CI workflows.
 - **Specific Fix:** Added and configured robust GitHub Actions workflows for automated testing, linting, and formatting.
 - **Status:** 🟩 Passing
+
+
+## 📄 Architecture & Design Decisions
+
+See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
+- Why linear scan instead of Redis Stack VSS
+- How system prompt hashing prevents cross-contamination
+- TTL auto-assignment strategy
+- Near-miss analysis for threshold tuning
