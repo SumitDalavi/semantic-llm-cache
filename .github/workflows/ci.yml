@@ -19,7 +19,12 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run Linter
-        run: npm run lint --if-present || true
+        run: |
+          if npm run | grep -qE '^  lint$'; then
+            npm run lint
+          else
+            echo 'No lint script configured; advisory check skipped.'
+          fi
       - name: Build
         run: npm run build
       - name: Run Tests

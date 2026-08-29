@@ -1,0 +1,29 @@
+{
+    "timestamp":  "2026-08-29T10:45:00Z",
+    "dataset":  "finance_faq_500",
+    "total_requests":  500,
+    "metrics":  {
+                    "cache_hits":  320,
+                    "cache_misses":  180,
+                    "hit_rate_percentage":  64.0,
+                    "false_hit_rate_percentage":  0.2,
+                    "latency":  {
+                                    "avg_hit_latency_ms":  7.4,
+                                    "avg_miss_latency_ms":  1120.5,
+                                    "p95_hit_latency_ms":  12.1
+                                },
+                    "cost":  {
+                                 "cost_without_cache_usd":  1.25,
+                                 "actual_cost_usd":  0.45,
+                                 "cost_saved_usd":  0.80,
+                                 "cost_saved_percentage":  64.0
+                             }
+                },
+    "config":  {
+                   "embedding_model":  "text-embedding-3-small",
+                   "similarity_threshold":  0.95
+               },
+    "status":  "success",
+    "notes":  "Dummy benchmark results generated to demonstrate the cost and latency reduction capabilities of the semantic cache.",
+    "illustrative":  true
+}

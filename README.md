@@ -3,7 +3,7 @@
 > **Maturity:** Full Prototype
 > _Semantic caching proxy for LLMs that detects semantically similar requests and serves cached responses instantly._
 
-> **Cut LLM API costs 30–60% and reduce P95 latency to near-zero** with a drop-in semantic caching proxy that detects semantically similar requests and serves cached responses instantly.
+> A drop-in semantic caching proxy that detects semantically similar requests and serves cached responses instantly.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-green?logo=nodedotjs)](https://nodejs.org/)
@@ -36,7 +36,7 @@ Your App (unchanged, just change base_url)
       ▼ :9090/metrics
 ┌─────────────────────┐
 │   Prometheus        │──► Grafana Dashboard
-│   hit rate, cost,   │    (real-time cost savings)
+│   hit rate, cost,   │
 │   latency P50/P95   │
 └─────────────────────┘
 ```
@@ -49,7 +49,7 @@ Your App (unchanged, just change base_url)
 | Proxy API | Express (OpenAI-compatible) | Drop-in replacement — zero app changes |
 | Embeddings | OpenAI `text-embedding-3-small` | $0.02/1M tokens, 1536 dims, L2-normalized |
 | Vector Store | Redis + ioredis (cosine scan) | Sub-millisecond lookups, LRU eviction |
-| Metrics | `prom-client` → Prometheus → Grafana | Real-time hit rate & cost savings |
+| Metrics | `prom-client` → Prometheus → Grafana | Real-time cache telemetry |
 | Containerization | Docker + docker-compose | Full stack: proxy + Redis + Prometheus + Grafana |
 
 ## 🚀 Quick Start
@@ -80,19 +80,9 @@ client = OpenAI(api_key="...")
 client = OpenAI(api_key="...", base_url="http://localhost:4000/v1")
 ```
 
-### 4. Watch the savings accumulate
+### 4. Monitor cache telemetry
 ```bash
 curl http://localhost:4000/cache/stats
-```
-```json
-{
-  "totalRequests": 2000,
-  "cacheHits": 1240,
-  "hitRate": 62.0,
-  "totalCostSaved": 4.82,
-  "avgHitLatencyMs": 8,
-  "avgMissLatencyMs": 1340
-}
 ```
 
 ## 📡 API Reference
@@ -100,7 +90,7 @@ curl http://localhost:4000/cache/stats
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/v1/chat/completions` | OpenAI-compatible proxy endpoint |
-| `GET` | `/cache/stats` | Hit rate, cost savings, latency breakdown |
+| `GET` | `/cache/stats` | Hit rate, cost, latency breakdown |
 | `DELETE` | `/cache/invalidate/:keyHash` | Invalidate all entries for a system prompt |
 | `GET` | `/metrics` | Prometheus metrics (port 9090) |
 | `GET` | `/health` | Health check |
@@ -120,7 +110,7 @@ The key trade-off is **similarity threshold vs. hit rate**:
 |---|---|---|
 | 0.90 | Very high | Some semantically similar but subtly different prompts may share answers |
 | **0.95** | **High** | **Safe default — recommended** |
-| 0.98 | Low | Near-exact match only — safe but fewer savings |
+| 0.98 | Low | Near-exact match only — safest default |
 
 Adjust in `.env`:
 ```
