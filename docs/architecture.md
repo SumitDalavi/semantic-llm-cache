@@ -1,37 +1,51 @@
-# Architecture: Semantic Caching Layer for LLM APIs
+# Architecture — semantic-llm-cache
+> Last updated: 2026-08-29 | Maturity: Full Prototype
+> _Semantic caching proxy using vector embeddings._
 
 ## System Diagram
+The following Mermaid.js sequence diagram maps the core workflow and interactions:
 
 ```mermaid
-sequenceDiagram
-    participant App as Your Application
-    participant Proxy as Semantic Cache Proxy
-    participant Embed as OpenAI Embeddings API
-    participant Redis as Redis (Vector Store)
-    participant LLM as LLM Provider (OpenAI / Anthropic)
-    participant Prom as Prometheus
+flowchart TD
+    App(["User Application"])
+    Proxy["Semantic Proxy (Node.js)"]
+    Embed["OpenAI Embeddings API"]
+    Redis[("Redis (Vector Store)")]
+    LLM["Upstream LLM (OpenAI/Anthropic)"]
 
-    App->>Proxy: POST /v1/chat/completions<br/>{messages, model, temperature}
-
-    Proxy->>Proxy: Build cache key hash<br/>(system_prompt + model + temperature + max_tokens)
-
-    Proxy->>Embed: Embed user prompt<br/>text-embedding-3-small ($0.02/1M tokens)
-    Embed-->>Proxy: 1536-dim vector
-
-    Proxy->>Redis: Scan entries with same cache key hash<br/>Compute cosine similarity for each
-    Redis-->>Proxy: Best match + similarity score
-
-    alt Cache HIT (similarity >= 0.95)
-        Proxy-->>App: Cached response in <10ms<br/>X-Cache-Hit: true<br/>X-Cache-Similarity: 0.9734
-        Proxy->>Prom: Record hit, latency, cost_saved
-    else Cache MISS (similarity < 0.95)
-        Proxy->>LLM: Forward original request
-        LLM-->>Proxy: Response + token usage
-        Proxy-->>App: Live response<br/>X-Cache-Hit: false
-        Proxy->>Redis: Store embedding + response + metadata (async, non-blocking)
-        Proxy->>Prom: Record miss, latency
-    end
+    App -->|"POST /v1/chat/completions"| Proxy
+    Proxy -->|"Generate Embedding"| Embed
+    Embed -->|"Vector"| Proxy
+    Proxy <-->|"Cosine Similarity Search"| Redis
+    Proxy -.->|"Cache Miss"| LLM
+    LLM -.->|"Response"| Proxy
+    Proxy -.->|"Save to Cache"| Redis
+    Proxy -->|"Return Response"| App
 ```
+
+## Component Table
+
+| Component | File | Responsibility | Tech |
+|---|---|---|---|
+| Proxy Server | `src/server.ts` | Express server intercepting OpenAI API format | Node.js |
+| Embedding Engine | `src/embeddings.ts` | Calls `text-embedding-3-small` | TypeScript |
+| Cache Store | `src/cache.ts` | Computes cosine similarity against Redis data | TypeScript |
+
+## Port Assignments
+
+| Service | Port | Notes |
+|---|---|---|
+| Proxy API | `4000` | Drop-in replacement for `api.openai.com` |
+| Metrics | `9090` | Prometheus endpoint `/metrics` |
+| Grafana | `3001` | Dashboard UI |
+
+## Dependency Honesty Table
+
+| Dependency | Status | Notes |
+|---|---|---|
+| Redis | **Real** | Runs locally via Docker Compose. |
+| OpenAI API | **Optional** | Required for real embeddings and LLM completions, but tests simulate this if no key is provided. |
+
 
 ## Component Breakdown
 
@@ -74,29 +88,6 @@ After a cache miss, we forward to the LLM and return the response to the user *f
 
 ### Decision: Linear scan vs. Redis Stack VSS
 Linear scan is simpler to operate (no Redis Stack module required), survives Redis restarts trivially, and is performant for typical cached entry counts (hundreds to low thousands). We document the clear upgrade path to HNSW-based VSS for production scale.
-
-## Verification Commands
-
-```bash
-# Start the stack
-docker-compose up -d
-
-# Send a fresh request (cache miss — observe latency ~1-2s)
-curl -X POST http://localhost:4000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"messages":[{"role":"user","content":"What is the capital of France?"}],"model":"gpt-4o-mini"}'
-
-# Repeat the same request (cache hit — observe latency <20ms)
-curl -X POST http://localhost:4000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{"messages":[{"role":"user","content":"Tell me the capital city of France"}],"model":"gpt-4o-mini"}'
-
-# Check hit rate and savings
-curl http://localhost:4000/cache/stats
-
-# Run tests
-npm test
-```
 
 ## Post-Mortem: What Was Accomplished
 
