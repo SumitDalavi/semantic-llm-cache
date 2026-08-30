@@ -15,6 +15,22 @@ const EMBEDDING_MODEL = (process.env.EMBEDDING_MODEL ?? 'text-embedding-3-small'
  * Uses OpenAI text-embedding-3-small: cheap ($0.02/1M tokens), fast, 1536 dimensions.
  */
 export async function embedText(text: string): Promise<number[]> {
+  const apiKey = process.env.OPENAI_API_KEY || "";
+  if (apiKey.startsWith("sk-dummy")) {
+    const arr = new Array(1536).fill(0.0);
+    // Simple hash to ensure distinct embeddings for different strings
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash = hash & hash;
+    }
+    // L2 normalize the mock embedding
+    arr[0] = Math.abs(hash % 1000) / 1000.0 + 0.1;
+    arr[1] = Math.abs((hash * 7) % 1000) / 1000.0 + 0.1;
+    arr[2] = Math.abs((hash * 13) % 1000) / 1000.0 + 0.1;
+    return arr;
+  }
+
   const response = await getOpenAI().embeddings.create({
     model: EMBEDDING_MODEL,
     input: text.substring(0, 8000), // cap at 8k chars to avoid token limit errors

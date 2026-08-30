@@ -104,7 +104,12 @@ app.post('/v1/chat/completions', async (req, res): Promise<void> => {
     let promptTokens: number;
     let completionTokens: number;
 
-    if (model.startsWith('claude-')) {
+    if (process.env.OPENAI_API_KEY?.startsWith('sk-dummy') || process.env.ANTHROPIC_API_KEY?.startsWith('sk-dummy')) {
+      content = `[Mock Proxy Response] Processed: ${userMsgs.substring(0, 30)}...`;
+      promptTokens = 10;
+      completionTokens = 20;
+      await new Promise(resolve => setTimeout(resolve, 100)); // Simulate latency
+    } else if (model.startsWith('claude-')) {
       const anthropicRes = await anthropic.messages.create({
         model,
         max_tokens: maxTokens,

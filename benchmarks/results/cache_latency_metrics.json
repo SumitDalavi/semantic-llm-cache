@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-08-29T13:56:06.320Z",
+  "environment": {
+    "os": "win32",
+    "cpu": "x64",
+    "node_version": "v24.19.0"
+  },
+  "fixture": "100 generated 1536-dimensional embeddings with random noise perturbation",
+  "seed": 42,
+  "results": {
+    "cache_miss_p50_ms": 23.69,
+    "cache_miss_p99_ms": 45.79,
+    "cache_hit_p50_ms": 88.32,
+    "cache_hit_p99_ms": 97.46,
+    "hit_rate_pct": 100,
+    "speedup_factor": 0.27
+  },
+  "command": "bash benchmarks/run.sh",
+  "notes": "Local run testing linear cosine similarity scan performance"
+}
