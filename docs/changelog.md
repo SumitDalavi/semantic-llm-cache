@@ -7,6 +7,7 @@
 - **Health Reporting:** Exposed `/health` or `/healthz` endpoint with PCL status detection (`mock` vs `live`).
 - **Dynamic Reloading:** Support for atomic ConfigMap / secret reloads without requiring pod restarts.
 - **Supply Chain Security:** Trivy vulnerability scan gates and SPDX JSON SBOM (`sbom.spdx.json`) generation for all releases.
+- **GitHub Packages npm Distribution:** Configured scoped package `@sumitdalavi/semantic-llm-cache` with compiled TypeScript declarations (`dist/index.d.ts`) and automated npm publishing.
 
 ## [0.1.0] - 2026-10-18
 ### Added

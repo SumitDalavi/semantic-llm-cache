@@ -228,3 +228,10 @@ cat sbom.spdx.json | jq .
 - [Runbook](docs/runbook.md)
 - [Decisions](docs/decisions.md)
 - [Changelog](docs/changelog.md)
+
+### NPM Package Installation
+Install the SDK directly from GitHub Packages:
+```bash
+npm config set @sumitdalavi:registry https://npm.pkg.github.com
+npm install @sumitdalavi/semantic-llm-cache
+```
