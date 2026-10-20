@@ -174,17 +174,6 @@ Fully verifies distance calculations, eviction policies, and threshold triggers.
 ## Known Limitations & Honest Scope
 - **Scale Limit**: The linear scan approach fundamentally degrades at O(N). If the cache exceeds 10,000 to 50,000 elements, the latency of scanning will begin to offset the LLM bypass benefits. A dedicated HNSW index (via pgvector or Qdrant) is required for massive datasets.
 
-## 👨‍💻 Author
-
-**Sumit Dalavi** — Senior DevSecOps / Platform Engineer  
-[GitHub](https://github.com/SumitDalavi) · [LinkedIn](https://in.linkedin.com/in/sumit-dalavi-762838129)
-
-## CI & Reliability Updates (August 2026)
-
-- **CI Pipeline Remediation:** Successfully resolved all CI/CD pipeline failures and established baseline CI workflows.
-- **Specific Fix:** Added and configured robust GitHub Actions workflows for automated testing, linting, and formatting.
-- **Status:** 🟩 Passing
-
 ## 📄 Architecture & Design Decisions
 
 See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
@@ -193,7 +182,7 @@ See [`docs/architecture.md`](docs/architecture.md) for deep-dives on:
 - TTL auto-assignment strategy
 - Near-miss analysis for threshold tuning
 
-## Release & Security Verification
+## 🔒 Release & Security Verification
 
 The project includes an automated DevSecOps release pipeline (`.github/workflows/release.yml`) triggered on semantic version tags (`v*.*.*`).
 
@@ -207,23 +196,18 @@ Each release automatically:
 ### Verifying the Release
 ```bash
 # Verify release via GitHub CLI
-gh release view v0.1.0 --repo SumitDalavi/semantic-llm-cache
+gh release view v0.2.0 --repo SumitDalavi/semantic-llm-cache
 
 # Download and inspect SBOM
-gh release download v0.1.0 --repo SumitDalavi/semantic-llm-cache --pattern "sbom.spdx.json"
+gh release download v0.2.0 --repo SumitDalavi/semantic-llm-cache --pattern "sbom.spdx.json"
 cat sbom.spdx.json | jq .
 ```
 
-## Documentation
+## 👨‍💻 Author
 
-- [Architecture](docs/ARCHITECTURE.md)
-- [Runbook](docs/runbook.md)
-- [Decisions](docs/decisions.md)
-- [Changelog](docs/changelog.md)
+**Sumit Dalavi** — Senior DevSecOps / Platform Engineer  
+[GitHub](https://github.com/SumitDalavi) | [LinkedIn](https://in.linkedin.com/in/sumit-dalavi-762838129)
 
-### NPM Package Installation
-Install the SDK directly from GitHub Packages:
-```bash
-npm config set @sumitdalavi:registry https://npm.pkg.github.com
-npm install @sumitdalavi/semantic-llm-cache
-```
+---
+*Built with a focus on robust patterns, not toy demos.*
+
