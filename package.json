@@ -1,6 +1,14 @@
 {
-  "name": "semantic-llm-cache",
+  "name": "@sumitdalavi/semantic-llm-cache",
   "version": "0.2.0",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SumitDalavi/semantic-llm-cache.git"
+  },
   "description": "Drop-in semantic caching proxy for LLM APIs \u2014 reduce costs 30-60% by detecting and serving semantically similar cached responses",
   "main": "dist/index.js",
   "scripts": {
