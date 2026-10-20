@@ -1,23 +1,18 @@
 # Semantic Caching Layer for LLM APIs
 
-[![Release](https://img.shields.io/github/v/release/SumitDalavi/semantic-llm-cache?color=blue&logo=github)](https://github.com/SumitDalavi/semantic-llm-cache/releases)
+[![CI Pipeline](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/SumitDalavi/semantic-llm-cache?color=0969da&label=release&logo=github)](https://github.com/SumitDalavi/semantic-llm-cache/releases)
 [![Release Workflow](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/release.yml/badge.svg)](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/release.yml)
-[![SBOM](https://img.shields.io/badge/SBOM-SPDX%20JSON-blueviolet?logo=spdx)](https://github.com/SumitDalavi/semantic-llm-cache/releases)
-
-[![Release](https://img.shields.io/github/v/release/SumitDalavi/semantic-llm-cache?color=blue&logo=github)](https://github.com/SumitDalavi/semantic-llm-cache/releases)
-[![SBOM](https://img.shields.io/badge/SBOM-SPDX%20JSON-blueviolet?logo=spdx)](https://github.com/SumitDalavi/semantic-llm-cache/releases)
-
-![CI](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml/badge.svg?branch=master)
+[![GHCR Container](https://img.shields.io/badge/ghcr.io-v0.2.0-blue?logo=docker&logoColor=white)](https://github.com/SumitDalavi/semantic-llm-cache/pkgs/container/semantic-llm-cache)
+[![npm package](https://img.shields.io/badge/npm-%40sumitdalavi-cb3837?logo=npm&logoColor=white)](https://github.com/SumitDalavi/semantic-llm-cache/packages)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org)
+[![SBOM](https://img.shields.io/badge/SBOM-SPDX%202.3-blueviolet?logo=spdx)](https://github.com/SumitDalavi/semantic-llm-cache/releases/tag/v0.2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 > **Maturity:** Full Prototype
 > _Semantic caching proxy for LLMs that detects semantically similar requests and serves cached responses instantly._
 
 > A drop-in semantic caching proxy that detects semantically similar requests and serves cached responses instantly.
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-20-green?logo=nodedotjs)](https://nodejs.org/)
-[![Redis](https://img.shields.io/badge/Redis-7-red?logo=redis)](https://redis.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 ---
 
@@ -70,7 +65,6 @@ cd semantic-llm-cache
 cp .env.example .env
 # Add OPENAI_API_KEY and ANTHROPIC_API_KEY to .env
 
-![CI](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml/badge.svg?branch=master)
 ```
 
 ### 2. Start the full stack
@@ -85,13 +79,11 @@ docker-compose up -d
 ```python
 # Before
 
-![CI](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml/badge.svg?branch=master)
 from openai import OpenAI
 client = OpenAI(api_key="...")
 
 # After — ONE line change
 
-![CI](https://github.com/SumitDalavi/semantic-llm-cache/actions/workflows/ci.yml/badge.svg?branch=master)
 client = OpenAI(api_key="...", base_url="http://localhost:4000/v1")
 ```
 
