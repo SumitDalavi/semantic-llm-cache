@@ -1,7 +1,7 @@
 {
   "name": "semantic-llm-cache",
-  "version": "1.0.0",
-  "description": "Drop-in semantic caching proxy for LLM APIs — reduce costs 30-60% by detecting and serving semantically similar cached responses",
+  "version": "0.2.0",
+  "description": "Drop-in semantic caching proxy for LLM APIs \u2014 reduce costs 30-60% by detecting and serving semantically similar cached responses",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
