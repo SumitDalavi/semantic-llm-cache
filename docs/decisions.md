@@ -13,3 +13,10 @@ We chose to perform the cosine similarity in the Node.js application layer using
 **Consequences:**  
 - ✅ Works with any standard Redis instance (ElastiCache, Memorystore) without requiring Redis Stack.
 - ⚠️ Slower for very large datasets (>100k cached prompts). However, by namespacing the cache keys by the SHA-256 hash of the system prompt + user context, the search space is small enough that a linear scan in V8 takes <1ms.
+
+## ADR-002: Progressive Credential Loading (PCL) Architecture
+- **Context:** Production hardening required live backends (PostgreSQL, Redis, OpenAI, Anthropic), but removing mocks would break CI pipelines and create high developer onboarding friction.
+- **Decision:** Implement Progressive Credential Loading. Keep in-memory and local mock heuristics as the default safe baseline, while wrapping external integrations in auto-promoting factory adapters triggered by environment variables.
+- **Consequences:** 
+  - *Pros:* 100% CI pass rate without requiring external secrets; zero setup friction for new contributors; progressive upgrade to production clusters.
+  - *Cons:* Adds lightweight factory abstraction layers and runtime credential detection logic.
