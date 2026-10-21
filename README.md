@@ -9,9 +9,6 @@
 [![SBOM](https://img.shields.io/badge/SBOM-SPDX%202.3-blueviolet?logo=spdx)](https://github.com/SumitDalavi/semantic-llm-cache/releases/tag/v0.2.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-> **Maturity:** Full Prototype
-> _Semantic caching proxy for LLMs that detects semantically similar requests and serves cached responses instantly._
-
 > A drop-in semantic caching proxy that detects semantically similar requests and serves cached responses instantly.
 
 ---
