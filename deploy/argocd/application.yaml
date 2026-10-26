@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: semantic-llm-cache-staging
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: ai-systems
+    environment: staging
+    tier: core-service
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SumitDalavi/semantic-llm-cache.git
+    targetRevision: master
+    path: deploy/k8s/overlays/staging
+    kustomize:
+      images:
+        - name: ghcr.io/sumitdalavi/semantic-llm-cache
+          newTag: v0.2.0
+  destination:
+    server: https://staging-k8s.internal.net:6443
+    namespace: llm-cache
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas

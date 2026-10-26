@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: semantic-llm-cache
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: app
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1Gi

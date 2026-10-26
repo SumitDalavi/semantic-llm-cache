@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: semantic-llm-cache-dev
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: ai-systems
+    environment: dev
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SumitDalavi/semantic-llm-cache.git
+    targetRevision: master
+    path: deploy/k8s/overlays/dev
+    kustomize:
+      images:
+        - name: ghcr.io/sumitdalavi/semantic-llm-cache
+          newTag: v0.2.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: llm-cache
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 1m

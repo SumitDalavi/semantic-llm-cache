@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: llm-cache
+resources:
+  - ../../base
+patchesStrategicMerge:
+  - patches/replicas.yaml
+commonLabels:
+  environment: staging
+images:
+  - name: ghcr.io/sumitdalavi/semantic-llm-cache
+    newTag: v0.2.0
